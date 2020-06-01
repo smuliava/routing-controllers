@@ -30,7 +30,7 @@
   "bugs": {
     "url": "https://github.com/pleerock/routing-controllers/issues"
   },
-  "main": "index.js",
+  "main": "build/compiled/src/index.js",
   "tags": [
     "express",
     "express.js",
@@ -102,6 +102,7 @@
     "package": "npm run build && npm run copy && npm run public && rimraf build/compiled",
     "pretest": "npm run lint",
     "public": "json -I -f build/package/package.json -e 'this.private=false'",
-    "test": "rimraf coverage && cross-env NODE_ENV=test nyc mocha test/**/*.ts"
+    "test": "rimraf coverage && cross-env NODE_ENV=test nyc mocha test/**/*.ts",
+    "postinstall": "npm run build"
   }
 }

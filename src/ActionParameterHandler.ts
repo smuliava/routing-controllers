@@ -112,11 +112,14 @@ export class ActionParameterHandler<T extends BaseDriver> {
         // if param value is an object and param type match, normalize its string properties
         if (typeof value === "object" && ["queries", "headers", "params", "cookies"].some(paramType => paramType === param.type)) {
             await Promise.all(Object.keys(value).map(async key => {
-                const keyValue = value[key];
+                let keyValue = value[key];
                 if (typeof keyValue === "string") {
                     const ParamType: Function|undefined = Reflect.getMetadata("design:type", param.targetType.prototype, key);
                     if (ParamType) {
                         const typeString = ParamType.name.toLowerCase();
+                        if (typeString === "array" && !Array.isArray(keyValue)) {
+                            keyValue = [keyValue];
+                        }
                         value[key] = await this.normalizeParamValue(keyValue, {
                             ...param,
                             name: key,
